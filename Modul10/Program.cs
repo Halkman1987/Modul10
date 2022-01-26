@@ -1,74 +1,75 @@
-﻿
-using System;
-using System.Collections.Generic;
-namespace DebugWork1
+﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+
+namespace FinalTask
 {
-
-
     class Program
     {
-        static ILogger logger { get; set; }
-        public static void Main(string[] args)
+        public interface ICalc<T, Z>
         {
-            logger = new Logger();
-            CalculateP calcp = new CalculateP(logger);
-            CalculateM calcm = new CalculateM(logger);
-            Console.WriteLine("Добро пожаловать в примитивный калькулятор!");
-            string choice = null;
+            double Calc(T x, T y);
+        }
+        public class CalculateP : ICalc<double, double>
+        {
+            public double Calc(double x, double y)
+            {
+                return x + y;
+            }
+        }
+        public class CalculateM : ICalc<double, double>
+        {
+            public double Calc(double x, double y)
+            {
+                return x - y;
+            }
+        }
+        static void Main()
+        {
+
+            ICalc<double, double> calc = new CalculateP();
+            ICalc<double, double> calc2 = new CalculateM();
             try
             {
-                do
-                {
-                    Console.WriteLine("Введите первое число : ");
-                    double x = Convert.ToDouble(Console.ReadLine());
-                    Console.WriteLine("Введите второе число : ");
-                    double y = Convert.ToDouble(Console.ReadLine());
-                    Console.WriteLine("Выберите операцию + или - :");
-                    choice = Console.ReadLine();
-                    switch (choice)
-                    {
-                        case "+":
-                            double resp = calcp.Calc(x, y);
-                            Console.WriteLine($"Результатом сложения является чиcло : {resp}");
-                            break;
-                        case "-":
-                            double resm = calcm.Calc(x, y);
-                            Console.WriteLine($"Результатом вычитания является чиcло : {resm}");
-                            break;
-                        default:
-                            Console.WriteLine("Давайте еще раз введем цифры и всётаки выберем операцию + или - !!!");
-                            break;
-                    }
-                }
-                while (choice != "+" && choice != "-");
+                Console.WriteLine("Введите первое число : ");
+                double x = Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine("Введите второе число : ");
+                double y = Convert.ToDouble(Console.ReadLine());
+                var resultp = calc.Calc(x, y);
+                var resultm = calc2.Calc(x, y);
+                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"Результатом сложения является чиcло : {resultp}");
+
+                Console.ResetColor();
+
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Результатом вычитания является чиcло : {resultm}");
+                Console.ResetColor();
+
+
             }
-            catch (FormatException ex) { logger.Error(ex.Message); }
-            catch (Exception e) { logger.Error(e.Message); }
-        }
-    }
-    public interface ILogger
-    {
-        void Event(string message);
-        void Error(string message);
-    }
-    public class Logger : ILogger
-    {
-        public void Error(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
-            Console.ResetColor();
+            catch (FormatException ex)
+            {
+                Console.WriteLine(" Вы ввели некорректные значения ");
+                Console.WriteLine(ex.Message);
+
+            }
+            finally
+            {
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.WriteLine(" Вы ввели корректные значения , тем самым не вызвал исключения формата данных! ");
+                Console.ResetColor();
+            }
+
         }
 
-        public void Event(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine(message);
-            Console.ResetColor();
-        }
     }
-    public interface ICalc<T, Z>
-    {
-        public double Calc(T x, T y);
-    }
+  
+
 }
+
