@@ -27,7 +27,6 @@ namespace FinalTask
         }
         static void Main()
         {
-
             ICalc<double, double> calc = new CalculateP();
             ICalc<double, double> calc2 = new CalculateM();
             try
@@ -35,41 +34,33 @@ namespace FinalTask
                 Console.WriteLine("Введите первое число : ");
                 double x = Convert.ToDouble(Console.ReadLine());
                 Console.WriteLine("Введите второе число : ");
-                double y = Convert.ToDouble(Console.ReadLine());
+                double y = Convert.ToDouble(Console.ReadLine()); 
                 var resultp = calc.Calc(x, y);
                 var resultm = calc2.Calc(x, y);
-                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine();
-
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"Результатом сложения является чиcло : {resultp}");
-
                 Console.ResetColor();
-
-
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"Результатом вычитания является чиcло : {resultm}");
                 Console.ResetColor();
-
-
             }
             catch (FormatException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(" Вы ввели некорректные значения ");
                 Console.WriteLine(ex.Message);
-
+                Console.ResetColor();
             }
+            //незнаю как вызывать этот блок в случае удачного исхода подсчета
             finally
             {
                 Console.BackgroundColor = ConsoleColor.Green;
                 Console.WriteLine(" Вы ввели корректные значения , тем самым не вызвал исключения формата данных! ");
                 Console.ResetColor();
             }
-
         }
-
     }
-  
-
 }
 
